@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import "../../styles/globals.css";
+import "../styles/globals.css";
+import '@mantine/core/styles.css';
 import {Poppins} from 'next/font/google'
 import dbConnect from "@/database/db";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-
+import ProviderWrapper from "@/components/layout/ProviderWrapper";
+import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 const poppins = Poppins({
   subsets:['latin'],
   variable:"--font-poppins",
@@ -23,11 +25,18 @@ export default async function RootLayout({
   await dbConnect();
   return (
     <html lang="en">
+      <head>
+        <ColorSchemeScript/>
+      </head>
       <body
-        className={`antialiased ${poppins.variable} font-poppins`}
+        className={`antialiased ${poppins.variable} font-poppins min-h-screen`}
       >
         <Header/>
-        {children}
+       <ProviderWrapper>
+       <div className=" min-h-[82vh]">
+       {children}
+       </div>
+       </ProviderWrapper>
         <Footer/>
       </body>
     </html>

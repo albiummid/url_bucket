@@ -8,7 +8,7 @@ async function dbConnect() {
         return;
     }
     try{
-        const db = await mongoose.connect(env.MONGO_DB_URI);
+        const db = await mongoose.connect(env.NEXT_PUBLIC_MONGO_DB_URI);
         connection={isConnected : db.connections[0].readyState}
         console.log(`⚡ DB_CONNECTED`)
     }catch(err){

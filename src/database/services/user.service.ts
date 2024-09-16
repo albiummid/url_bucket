@@ -1,4 +1,4 @@
-import { everyRequired } from "@/libs/utils/helper"
+import { everyRequired } from "@/lib/helper"
 import User from "../models/User"
 import Bucket from "../models/Bucket"
 

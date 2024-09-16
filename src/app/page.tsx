@@ -1,17 +1,40 @@
 'use client'
-import React from 'react'
+import React, { useCallback } from 'react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import LottieAnimation from '@/assets/animation/lottie/organize.json'
-
+import Swal from 'sweetalert2'
 import { useLottie } from "lottie-react";
 import Container from '@/components/layout/Container'
 import { Typewriter } from 'react-simple-typewriter'
+import { useAuthState } from '@/lib/zustand'
+import { useRouter } from 'next/navigation'
 export default function HomePage() {
+  const router = useRouter();
+  const {isLoading,isAuthenticated} = useAuthState();
   const {View,} = useLottie({
     animationData:LottieAnimation,
     loop:true,
   })
+  const handleGetStarted = useCallback(()=>{
+    if(isLoading)return
+    if(isAuthenticated){
+      router.push('/dashboard/create')
+    }else{
+      Swal.fire({
+        title:"Opps !",
+        text:"You are not logged in yet. Please login first",
+        icon:"info",
+        confirmButtonText:"Login"
+        
+      }).then(result=>{
+        if(result.isConfirmed){
+          router.push('/auth/login')
+        }
+      })
+    }
+  },[isLoading,isAuthenticated])
+  
   return (
   <div className=' '>
       <Container>
@@ -43,7 +66,7 @@ export default function HomePage() {
     
     </div> */}
 
-    <Button variant={"destructive"} className='md:text-base text-xs'  >
+    <Button onClick={handleGetStarted} disabled={isLoading} variant={"destructive"} className='md:text-base text-xs'  >
         Get Started for Free
       </Button>
      
