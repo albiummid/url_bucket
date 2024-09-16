@@ -6,7 +6,7 @@ import LottieAnimation from '@/assets/animation/lottie/organize.json'
 
 import { useLottie } from "lottie-react";
 import Container from '@/components/layout/Container'
-
+import { Typewriter } from 'react-simple-typewriter'
 export default function HomePage() {
   const {View,} = useLottie({
     animationData:LottieAnimation,
@@ -21,7 +21,10 @@ export default function HomePage() {
      <div className='md:mb-10 '>
      <span className='text-lg  md:text-3xl  font-semibold  sm:text-left'>
         Simple and fast  <br /> <span className=' text-red-500 text-2xl md:text-5xl '>
-        URL shortener
+        <Typewriter
+        cursor
+        cursorStyle={'_'}
+        words={['URL Manager','URL shortener',"URL analytics"]} loop/>
         </span>
       </span>
      </div>
