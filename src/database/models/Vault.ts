@@ -1,6 +1,16 @@
 import mongoose, { Schema } from "mongoose";
+import { Timestamp } from "../db";
 
 const modelName = "Vault";
+export interface IVault {
+    model:string;
+    contentId:mongoose.Types.ObjectId;
+    content:object;
+    status:'Deleted'|'Updated';
+    version:number;
+}
+
+export type IVaultDocument = IVault & Timestamp;
 
 const schema = {
     model:{
@@ -8,7 +18,7 @@ const schema = {
         required:true
     },
     contentId:{
-        type:mongoose.Schema.ObjectId,
+        type:mongoose.Types.ObjectId,
         required:true,
     },
     content:{
@@ -17,15 +27,18 @@ const schema = {
     },
     status:{
         type:String,
-        enums:["Deleted","Changed"]
+        enums:["Deleted","Updated"],
+        required:true
     },
-    changedVersion:{
+    version:{
         type:Number,
-        required:true,
+        required:true
     }
 };
 
 
-export default mongoose.models[modelName]?? mongoose.model(modelName,new Schema(schema,{
-    timestamps:true
-}))
+export default  mongoose.models[modelName] as mongoose.Model<IVaultDocument> 
+||
+ mongoose.model(modelName,new Schema(schema,{timestamps:true}));
+
+

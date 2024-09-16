@@ -1,6 +1,14 @@
 import mongoose, { Schema } from "mongoose";
+import { Timestamp } from "../db";
 
 const modelName = "Bucket";
+
+export type IBucketDocument  = Timestamp & {
+    name:string;
+    userId:mongoose.Types.ObjectId;
+    color:string;
+    urlCount:number;
+}
 
 const schema = {
     name:{
@@ -8,7 +16,7 @@ const schema = {
         required:true
     },
     userId:{
-        type:mongoose.Schema.ObjectId,
+        type:mongoose.Types.ObjectId,
         required:true,
         ref:"User"
     },
@@ -23,6 +31,6 @@ const schema = {
 };
 
 
-export default mongoose.models[modelName]?? mongoose.model(modelName,new Schema(schema,{
+export default mongoose.models[modelName] as mongoose.Model<IBucketDocument>?? mongoose.model(modelName,new Schema(schema,{
     timestamps:true
 }))

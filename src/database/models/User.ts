@@ -1,8 +1,21 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Model, Schema } from "mongoose";
 
 const modelName = "User";
 
-const schema = {
+export interface IUser {
+    name:string;
+    email:string;
+    password:string
+    oAuthInfo?:object
+}
+
+export interface IUserDocument extends IUser {
+    createdAt:Date;
+    updatedAt:Date;
+} 
+
+
+const schema ={
     name:{
         type:String,
         required:true,
@@ -21,9 +34,9 @@ const schema = {
         type:Object,
         required:true
     }
-};
+}
+
+export default  mongoose.models[modelName] as Model<IUserDocument> || mongoose.model(modelName,new Schema<IUserDocument>(schema,{timestamps:true}));
 
 
-export default mongoose.models[modelName]?? mongoose.model(modelName,new Schema(schema,{
-    timestamps:true
-}))
+

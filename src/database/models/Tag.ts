@@ -1,10 +1,11 @@
 import mongoose, { Schema } from "mongoose";
+import { Timestamp } from "../db";
 
 const modelName = "Tag";
 
 const schema = {
     userId:{
-        type:mongoose.Schema.ObjectId,
+        type:mongoose.Types.ObjectId,
         ref:"User",
         required:true
     },
@@ -18,7 +19,12 @@ const schema = {
     }
 };
 
+export type ITagDocument = Timestamp & {
+    userId:mongoose.Types.ObjectId;
+    value:string;
+    usedCount:number
+}
 
-export default mongoose.models[modelName]?? mongoose.model(modelName,new Schema(schema,{
+export default mongoose.models[modelName] as mongoose.Model<ITagDocument> || mongoose.model(modelName,new Schema(schema,{
     timestamps:true
 }))
