@@ -1,9 +1,5 @@
-import React, { PropsWithChildren } from 'react'
+import { PropsWithChildren } from "react";
 
-export default function LayoutPage(props:PropsWithChildren) {
-  return (
-    <div>
-      {props.children}
-    </div>
-  )
+export default function LayoutPage(props: PropsWithChildren) {
+    return <div>{props.children}</div>;
 }
