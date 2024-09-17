@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("NEXT_PUBLIC_DB_URI")
+  // directUrl = env("NEXT_PUBLIC_DIRECT_URL")
+}
+
+model User {
+  id          String    @id @default(cuid()) @db.Uuid
+  name        String
+  email       String    @unique
+  password    String?
+  picture     String?
+  phoneNumber String?
+  gender      String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  buckets     Bucket[]
+  tags        Tag[]
+  sessions    Session[]
+}
+
+model Session {
+  id          String    @id @default(cuid()) @db.Uuid
+  userId      String    @db.Uuid
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  browserInfo Json
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  endedAt     DateTime?
+}
+
+model Tag {
+  id          String       @id @default(cuid()) @db.Uuid
+  userId      String       @db.Uuid
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bucketItems BucketItem[]
+}
+
+model Bucket {
+  id        String       @id @default(cuid()) @db.Uuid
+  name      String
+  color     String
+  userId    String       @db.Uuid
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  itemCount Int          @default(0)
+  items     BucketItem[]
+  priority  Int @default(0)
+  isFavorite Boolean @default(false)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model BucketItem {
+  id          String   @id @default(cuid()) @db.Uuid
+  bucketId    String   @db.Uuid
+  bucket      Bucket   @relation(fields: [bucketId], references: [id], onDelete: Cascade)
+  tags        Tag[]
+  url         String
+  title       String
+  description String?
+  priority  Int @default(0)
+  isFavorite Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Visitor {
+  id          String            @id @default(cuid()) @db.Uuid
+  itemClicks  BucketItemClick[]
+  browserInfo Json
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+model BucketItemClick {
+  id        String   @id @default(cuid()) @db.Uuid
+  visitorId String   @db.Uuid
+  visitor   Visitor  @relation(fields: [visitorId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Vault {
+  id        String      @id @default(cuid()) @db.Uuid
+  modelName String
+  content   Json
+  contentId String      @db.Uuid
+  status    VaultStatus
+  version   Int
+}
+
+enum VaultStatus {
+  Deleted
+  Updated
+}

@@ -1,24 +1,39 @@
 "use client";
-import { firebaseApp } from "@/lib/firebase-config";
 import { useAuthState } from "@/lib/zustand";
-import { MantineProvider } from "@mantine/core";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { supabaseClient } from "@/utils/supabase/client";
+import { createTheme, MantineProvider } from "@mantine/core";
+import { useRouter } from "next/navigation";
 import { PropsWithChildren, useEffect } from "react";
 
-export default function ProviderWrapper({ children }: PropsWithChildren) {
-    const { setUser, setIsAuthenticated, setIsLoading } = useAuthState();
+export default function ProviderWrapper({
+    children,
+    data,
+}: PropsWithChildren & { data: any }) {
+    const {
+        setUser,
+        setIsAuthenticated,
+        setIsLoading,
+        setBrowserInfo,
+        // browserInfo,
+    } = useAuthState();
+    const router = useRouter();
+    const theme = createTheme({
+        /** Put your mantine theme override here */
+    });
+
     useEffect(() => {
-        const auth = getAuth(firebaseApp);
         const unsubscribe = () =>
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    setUser(user);
+            supabaseClient.auth.onAuthStateChange(async (event, session) => {
+                if (event === "SIGNED_IN") {
+                    setUser(session?.user.user_metadata);
                     setIsAuthenticated(true);
-                } else {
+                    router.push("/dashboard");
+                } else if (event === "SIGNED_OUT") {
                     setUser(null);
                     setIsAuthenticated(false);
                 }
                 setIsLoading(false);
+                setBrowserInfo(data.browserInfo);
             });
 
         return () => {
@@ -27,10 +42,8 @@ export default function ProviderWrapper({ children }: PropsWithChildren) {
     }, []);
 
     return (
-        <>
-            <MantineProvider>
-                <>{children}</>
-            </MantineProvider>
-        </>
+        <MantineProvider theme={theme}>
+            <div className="">{children}</div>
+        </MantineProvider>
     );
 }

@@ -2,15 +2,16 @@
 import Image from "next/image";
 // import logo_dark from '@/assets/images/logo_dark.svg'
 import logo_light from "@/assets/images/logo_light.svg";
-import { logout } from "@/lib/firebase-functions";
 import { useAuthState } from "@/lib/zustand";
+import { supabaseClient } from "@/utils/supabase/client";
+import { Button } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
-import { Button } from "../ui/button";
 import Container from "./Container";
 export default function Header() {
     const { isAuthenticated, user } = useAuthState();
     const router = useRouter();
+
     return (
         <Container className="">
             <div className="flex flex-row items-center justify-between">
@@ -32,20 +33,32 @@ export default function Header() {
                                 showCancelButton: true,
                             }).then((d) => {
                                 if (d.isConfirmed) {
-                                    logout();
+                                    router.push("/");
+                                    supabaseClient.auth.signOut();
                                 }
                             });
                         }}
-                        variant={"destructive"}
+                        // variant={"outline"}
+                        color="red"
+                        leftSection={
+                            <Image
+                                height={30}
+                                width={30}
+                                src={user?.picture}
+                                alt=""
+                                className="rounded-full"
+                            />
+                        }
                     >
-                        Logged in as {String(user?.displayName)}
+                        Logout
                     </Button>
                 ) : (
                     <Button
                         onClick={() => {
-                            router.push("/auth/login");
+                            router.push("/auth/sign-in");
                         }}
-                        variant={"destructive"}
+                        variant={"outline"}
+                        color="red"
                     >
                         Login
                     </Button>

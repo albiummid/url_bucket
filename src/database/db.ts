@@ -1,28 +1,14 @@
-import mongoose from "mongoose";
-import { env } from "../../env.app";
+import { PrismaClient } from "@prisma/client";
 
-let connection: { isConnected?: number } = {};
+const prismaClientSingleton = () => {
+    return new PrismaClient();
+};
 
-async function dbConnect() {
-    if (connection.isConnected) {
-        return;
-    }
-    try {
-        const db = await mongoose.connect(env.MONGO_DB_URI);
-        connection = { isConnected: db.connections[0].readyState };
-        console.log(`⚡ DB_CONNECTED`);
-    } catch (err) {
-        console.log(
-            `DB_ERROR: Connection couldn't established.\nDetails: ${JSON.stringify(
-                err
-            )}`
-        );
-    }
-}
+declare const globalThis: {
+    prismaGlobal: ReturnType<typeof prismaClientSingleton>;
+} & typeof global;
 
-export default dbConnect;
+const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
+export default prisma;
 
-export interface Timestamp {
-    createdAt: Date;
-    updatedAt: Date;
-}
+if (process.env.NODE_ENV === "production") globalThis.prismaGlobal = prisma;

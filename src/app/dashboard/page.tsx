@@ -1,3 +1,5 @@
-export default function DasboardIndex() {
-    return <div>Dashboard index</div>;
+import { redirect } from "next/navigation";
+
+export default function DashboardIndex() {
+    redirect("/dashboard/analytics");
 }
