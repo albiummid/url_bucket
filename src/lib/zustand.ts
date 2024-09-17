@@ -1,5 +1,4 @@
 "use client";
-import { User } from "firebase/auth";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -8,8 +7,8 @@ interface IAuthState {
     isAuthenticated: boolean;
     user: null | any;
     browserInfo: null | any;
-    setUser: (payload: User | any) => void;
-    setBrowserInfo: (payload: User | any) => void;
+    setUser: (payload: null | any) => void;
+    setBrowserInfo: (payload: null | any) => void;
     setIsAuthenticated: (payload: boolean) => void;
     setIsLoading: (payload: boolean) => void;
     resetState: () => void;
