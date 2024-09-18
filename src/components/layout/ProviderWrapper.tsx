@@ -20,25 +20,19 @@ export default function ProviderWrapper({
     const theme = createTheme({
         /** Put your mantine theme override here */
     });
-
     useEffect(() => {
-        const unsubscribe = () =>
-            supabaseClient.auth.onAuthStateChange(async (event, session) => {
-                if (event === "SIGNED_IN") {
-                    setUser(session?.user.user_metadata);
-                    setIsAuthenticated(true);
-                    router.push("/dashboard");
-                } else if (event === "SIGNED_OUT") {
-                    setUser(null);
-                    setIsAuthenticated(false);
-                }
-                setIsLoading(false);
-                setBrowserInfo(data.browserInfo);
-            });
-
-        return () => {
-            unsubscribe();
-        };
+        supabaseClient.auth.onAuthStateChange(async (event, session) => {
+            if (event === "SIGNED_IN") {
+                setUser(session?.user.user_metadata);
+                setIsAuthenticated(true);
+                router.push("/dashboard");
+            } else if (event === "SIGNED_OUT") {
+                setUser(null);
+                setIsAuthenticated(false);
+            }
+            setIsLoading(false);
+            setBrowserInfo(data.browserInfo);
+        });
     }, []);
 
     return (
