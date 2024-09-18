@@ -10,20 +10,20 @@
         "db:push": "dotenv -e .env.local -- npx prisma db push"
     },
     "dependencies": {
+        "@auth/prisma-adapter": "^2.5.0",
         "@mantine/charts": "^7.12.2",
         "@mantine/core": "^7.12.2",
         "@mantine/dates": "^7.12.2",
         "@mantine/dropzone": "^7.12.2",
         "@mantine/form": "^7.12.2",
         "@mantine/hooks": "^7.12.2",
-        "@prisma/client": "^5.19.1",
-        "@supabase/ssr": "^0.5.1",
-        "@supabase/supabase-js": "^2.45.4",
+        "@prisma/client": "5.12.0",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.1",
         "envalid": "^8.0.0",
         "lottie-react": "^2.4.0",
         "next": "14.2.11",
+        "next-auth": "^5.0.0-beta.21",
         "next-themes": "^0.3.0",
         "react": "^18",
         "react-dom": "^18",
@@ -50,6 +50,6 @@
         "typescript": "^5"
     },
     "prisma": {
-        "schema": "src/database/schema.prisma"
+        "schema": "database/schema.prisma"
     }
 }
