@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "dev": "next dev",
-        "build": "next build",
+        "build": "npx prisma generate && next build",
         "start": "next start",
         "lint": "next lint",
         "db:push": "dotenv -e .env.local -- npx prisma db push"
@@ -17,7 +17,7 @@
         "@mantine/dropzone": "^7.12.2",
         "@mantine/form": "^7.12.2",
         "@mantine/hooks": "^7.12.2",
-        "@prisma/client": "5.12.0",
+        "@prisma/client": "^5.19.1",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.1",
         "envalid": "^8.0.0",
